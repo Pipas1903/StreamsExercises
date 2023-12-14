@@ -29,17 +29,41 @@ public class Exercises {
 
     public List<Product> ex1() {
         // Obtain a list of products belonging to category “Books” with price > 100
-        return null;
+        ProductRepository productRepository = new ProductRepository();
+        return productRepository.getAll()
+                .stream()
+                .filter(getProductPrice -> getProductPrice.getPrice() > 100)
+                .collect(Collectors.toList());
+
     }
 
     public List<Order> ex2() {
         // Obtain a list of orders with products belonging to category “Baby”
-        return null;
+        OrderRepository orderRepository = new OrderRepository();
+        return orderRepository.getAll()
+                .stream()
+                .filter(searchProducts -> searchProducts.getProducts()
+                        .stream().anyMatch(searchCategory -> searchCategory.getCategory().equals("Baby")))
+                .collect(Collectors.toList())
+                ;
     }
 
     public List<Product> ex3() {
         // Obtain a list of products with category = “Toys” and then apply 10% discount
-        return null;
+        double discount = 1.1;
+        ProductRepository productRepository = new ProductRepository();
+        return productRepository.getAll()
+                .stream()
+                .filter(searchProductsCategory -> searchProductsCategory.getCategory().equals("Toys"))
+                /*
+                .map(product -> {
+                    product.setPrice(product.getPrice()/discount);
+                    return product;
+                })
+                */
+                .peek(product -> product.setPrice(product.getPrice() / discount))
+                .collect(Collectors.toList())
+                ;
     }
 
     public List<Product> ex4() {
