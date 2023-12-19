@@ -1,13 +1,10 @@
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Exercises {
     OrderRepository orderRepository = new OrderRepository();
@@ -67,7 +64,7 @@ public class Exercises {
         LocalDate inicialDate = LocalDate.of(2021, 2, 1);
         LocalDate finalDate = LocalDate.of(2021, 4, 1);
 
-        List<Product> listaOfProducts = orderRepository.getAll()
+        return orderRepository.getAll()
                 .stream()
                 .filter(order -> order.getCustomer().getTier().equals(2)
                         && order.getOrderDate().isAfter(inicialDate)
@@ -75,8 +72,6 @@ public class Exercises {
                 .flatMap(order -> order.getProducts().stream())
                 .distinct()
                 .toList();
-
-        return listaOfProducts;
     }
 
     public Optional<Product> ex5() {
@@ -136,7 +131,7 @@ public class Exercises {
                 .filter(date -> date.getOrderDate().isEqual(LocalDate.of(2021, 3, 14)))
                 .flatMap(price -> price.getProducts().stream())
                 .map(Product::getPrice)
-                .collect(Collectors.averagingDouble(e->e))
+                .collect(Collectors.averagingDouble(e -> e))
                 ;
     }
 
@@ -144,18 +139,23 @@ public class Exercises {
         // Obtain a collection of statistic figures (i.e. sum, average, max, min, count)
         // for all products of category “Books”
         // HELPFUL TIP: the methods mapToDouble() and summaryStatistics() might be useful here ;)
-        productRepository.getAll()
-                .stream()
-                .filter(filterBook->filterBook.getCategory().equals("Books"))
 
-        ;
-        return null;
+        return productRepository.getAll()
+                .stream()
+                .filter(filterBook -> filterBook.getCategory().equals("Books"))
+                .mapToDouble(Product::getPrice)
+                .summaryStatistics()
+                ;
     }
 
     public Map<Long, Integer> ex11() {
         // Obtain a map with order id as key and each order’s product count as value
         // HELPFUL TIP: the method Collectors.toMap() might be useful here
-        return null;
+        return orderRepository.getAll()
+                .stream()
+                .collect(Collectors.toMap(Order::getId,
+                        order -> order.getProducts().size()))
+                ;
     }
 
     public Map<Customer, List<Order>> ex12() {
