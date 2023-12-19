@@ -80,7 +80,6 @@ public class Exercises {
                 .stream()
                 .filter(category -> category.getCategory().equals("Books"))
                 .min(Comparator.comparingDouble(Product::getPrice))
-
                 ;
     }
 
@@ -161,25 +160,40 @@ public class Exercises {
     public Map<Customer, List<Order>> ex12() {
         // Obtain a map with orders grouped by customer
         // HELPFUL TIP: the method Collectors.groupingBy() might be useful here ;)
-        return null;
+        return orderRepository.getAll()
+                .stream()
+                .collect(Collectors.groupingBy(Order::getCustomer))
+                ;
     }
 
     public Map<Order, Double> ex13() {
         // Obtain a map with order as key and the order's products total sum as value
         // HELPFUL TIP: the method Collectors.toMap() might be useful here ;)
-        return null;
+        return orderRepository.getAll()
+                .stream()
+                .collect(Collectors.toMap(order -> order,
+                        order -> order.getProducts()
+                                .stream()
+                                .mapToDouble(Product::getPrice).sum()))
+                ;
     }
 
     public Map<String, List<String>> ex14() {
         // Obtain a map with list of product names by category
         // HELPFUL TIP: the method Collectors.groupingBy() might be useful here ;)
-        return null;
-
+        return productRepository.getAll()
+                .stream()
+                .collect(Collectors.groupingBy(Product::getCategory,
+                        Collectors.mapping(Product::getName, Collectors.toList())) //Esta função é aplicada a cada elemento do fluxo e mapeia esses elementos para um novo valor.
+                );
     }
 
     public Map<String, Optional<Product>> ex15() {
         // Obtain the most expensive product by category
         // HELPFUL TIP: the method Collectors.groupingBy() might be useful here ;)
-        return null;
+        return productRepository.getAll().stream()
+                .collect(Collectors.groupingBy(Product::getCategory,
+                        Collectors.maxBy(Comparator.comparing(Product::getPrice))
+                ));
     }
 }
