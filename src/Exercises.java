@@ -79,8 +79,7 @@ public class Exercises {
         return productRepository.getAll()
                 .stream()
                 .filter(category -> category.getCategory().equals("Books"))
-                .min(Comparator.comparingDouble(Product::getPrice))
-                ;
+                .min(Comparator.comparingDouble(Product::getPrice));
     }
 
     public List<Order> ex6() {
