@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -101,12 +102,10 @@ public class Exercises {
         // HELPFUL TIP: the methods peek() and flatMap() might be useful here ;)
         return orderRepository.getAll()
                 .stream()
-                .filter(date -> date.getOrderDate().isBefore(LocalDate.of(2021, 3, 15)))
-                .peek(order -> System.out.println(order.getOrderDate()))
-                .flatMap(products -> products.getProducts().stream())
-                .peek(product -> System.out.println(product.getName()))
-                .toList()
-                ;
+                .filter(order -> order.getOrderDate().equals(LocalDate.of(2021, 3, 15)))
+                .peek(System.out::println)
+                .flatMap(order -> order.getProducts().stream())
+                .toList();
 
     }
 
@@ -114,6 +113,7 @@ public class Exercises {
         // Calculate total sum of all orders placed in Feb 2021
         return orderRepository.getAll()
                 .stream()
+                //.filter(date -> date.getOrderDate().getMonth() == Month.FEBRUARY)
                 .filter(date -> date.getOrderDate().isAfter(LocalDate.of(2021, 1, 31))
                         && date.getOrderDate().isBefore(LocalDate.of(2021, 3, 1)))
                 .flatMap(products -> products.getProducts().stream())
